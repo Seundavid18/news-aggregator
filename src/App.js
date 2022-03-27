@@ -1,24 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Home from './Home';
+import Newsbody from './Pages/Newsbody';
+import Tech from './Pages/Tech';
+import Politics from './Pages/Politics'
+import Entertainment from './Pages/Entertainment'
+import Fashion from './Pages/Fashion'
+import  Sports from './Pages/Sports'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route>
+        <Route path='/' element={<Home />} />
+        <Route path=':newsbodyid' element={<Newsbody />} />
+        <Route path="/tech" element={<Tech />} />
+        <Route path="/politics" element={<Politics />} />
+        <Route path="/entertainment" element={<Entertainment />} />
+        <Route path="/fashion" element={<Fashion />} />
+        <Route path="/sport" element={<Sports />} />
+      </Route>
+    </Routes>
   );
 }
 
