@@ -6,11 +6,29 @@ import Footer from "../Components/Footer";
 
 function Tech() {
     const [news, setNews] = useState(null)
+    const [apiErr, setApiErr] = useState(null);
+
+    const handleErrors = (response) => {
+      if (!response.ok) {
+        setApiErr(response.status);
+        throw Error(response.status);
+      }
+      return response;
+    };
 
     useEffect(() => {
-        fetch("https://newsapi.org/v2/everything?q=tech&apiKey=7c73df71242848cc913cbcf69f6b8e90")
-          .then((response) => response.json())
-          .then((news) => setNews(news.articles));
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Host': 'free-news.p.rapidapi.com',
+                'X-RapidAPI-Key': '7a7e67e596mshe0fd1a4ab45fe8ap19c493jsnb3d43e214ded'
+            }
+        };
+        
+        fetch('https://free-news.p.rapidapi.com/v1/search?q=Tech&lang=en', options)
+            .then(handleErrors)
+            .then((response) => response.json())
+            .then((news) => setNews(news.articles));
       }, [setNews]);
 
     return(
@@ -20,23 +38,28 @@ function Tech() {
             <div className="pt-4 pb-5">
                 <div className="container">
                     <div className="flex gap-3 pb-3">
-                        {news === null ? (
-                            <div style={{display: 'flex', marginLeft: '550px',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
-                                <CircularProgress color="secondary" />
+                        {apiErr != null ? (
+                            <div>you encountered error {apiErr}</div>
+                    ) : 
+                        news === null ? (
+                            <div className="row mx-auto justify-content-center align-items-center flex-column">
+                                <div className="col-6">
+                                    <CircularProgress color="secondary" />
+                                </div>
                             </div>
                         ) : (
                             news.map((feed, index) => {
                                 return(
                                     <div key={index} className="flex-box pb-1">
                                         <h5 className="fs-4 fw-bold">{feed.title}</h5>
-                                        <p className="fs-6 text-secondary">{feed.description}</p>
-                                        <a href={feed.url} target="_blank">
+                                        <p className="fs-6 text-secondary">{feed.summary}</p>
+                                        <a href={feed.link} target="_blank">
                                             <p className="read-more">
                                                 Read More
                                             </p>
                                         </a>   
                                             
-                                        <p className="fs-6 text-secondary">{feed.publishedAt}</p>
+                                        <p className="fs-6 text-secondary">{feed.published_date}</p>
                                     </div>
                                 )
                             })
